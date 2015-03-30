@@ -12,7 +12,7 @@ var _ = Suite(&ConductorSuite{})
 func (s *ConductorSuite) TestGoFinished(c *C) {
 	var checker []bool
 
-	f := func() {
+	f := func(args ...interface{}) {
 		checker = append(checker, true)
 	}
 
@@ -32,7 +32,7 @@ func (s *ConductorSuite) TestGoLimit(c *C) {
 
 	concurrentCount := 0
 
-	f := func() {
+	f := func(args ...interface{}) {
 		defer func() {
 			concurrentCount--
 		}()

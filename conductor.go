@@ -10,14 +10,14 @@ type Conductor struct {
 	limited bool
 }
 
-func (s *Conductor) Go(fn func()) {
+func (s *Conductor) Go(fn func(args ...interface{}), args ...interface{}) {
 	s.Add(1)
 	if s.limited {
 		s.limiter <- true
 	}
 
 	wrapped := func() {
-		fn()
+		fn(args)
 
 		s.Done()
 		if s.limited {
