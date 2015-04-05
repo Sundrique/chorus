@@ -54,3 +54,21 @@ func (s *ConductorSuite) TestGoLimit(c *C) {
 	}
 	conductor.Wait()
 }
+
+func (s *ConductorSuite) TestGoWithArguments(c *C) {
+	var sum int
+
+	f := func(args ...interface{}) {
+		sum += args[0].(int)
+	}
+
+	var conductor Conductor
+
+	for i := 0; i < 10; i++ {
+		conductor.Go(f, i)
+	}
+
+	conductor.Wait()
+
+	c.Check(sum, Equals, 45)
+}

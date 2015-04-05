@@ -17,7 +17,7 @@ func (s *Conductor) Go(fn func(args ...interface{}), args ...interface{}) {
 	}
 
 	wrapped := func() {
-		fn(args)
+		fn(args...)
 
 		s.Done()
 		if s.limited {
