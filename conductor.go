@@ -10,26 +10,26 @@ type Conductor struct {
 	limited bool
 }
 
-func (s *Conductor) Go(fn func(args ...interface{}), args ...interface{}) {
-	s.Add(1)
-	if s.limited {
-		s.limiter <- true
+func (c *Conductor) Go(fn func(args ...interface{}), args ...interface{}) {
+	c.Add(1)
+	if c.limited {
+		c.limiter <- true
 	}
 
 	wrapped := func() {
 		fn(args...)
 
-		s.Done()
-		if s.limited {
-			<-s.limiter
+		c.Done()
+		if c.limited {
+			<-c.limiter
 		}
 	}
 	go wrapped()
 }
 
-func (s *Conductor) Limit(limit int) {
+func (c *Conductor) Limit(limit int) {
 	if limit > 0 {
-		s.limited = true
-		s.limiter = make(chan bool, limit)
+		c.limited = true
+		c.limiter = make(chan bool, limit)
 	}
 }
